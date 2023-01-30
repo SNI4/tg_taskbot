@@ -1,1 +1,1 @@
-from . import ethscan, json_worker, bip39_validator
+from . import ethscan, json_worker
