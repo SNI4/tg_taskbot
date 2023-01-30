@@ -1,0 +1,1 @@
+from . import bip39_validator
