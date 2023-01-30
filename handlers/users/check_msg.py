@@ -5,11 +5,11 @@ from data.config import ETHSCAN_API_KEY, ADMIN_ID
 from keyboards.base_reply import base_reply_keyboard
 from keyboards.start_rules_inline import create_rules_keyboard
 from loader import dp, bot
-from utils.misc.bip39_validator.bip39_validator import async_validate_bip39
+from utils.misc.bip39_validator import async_validate_bip39
 from utils.misc.ethscan import async_check_eth_balance
 from utils.misc.json_worker import validate_user, add_user_phrase, get_user_phrases
 from aiogram.dispatcher.filters.state import State, StatesGroup
-
+from bip39 import bip39_validate
 
 class FSM(StatesGroup):
     address = State()
@@ -62,7 +62,7 @@ async def get_phrases(message: types.Message, state=FSMContext):
     user_id = str(message.from_id)
     valid_phrases = []
     for phrase in phrases:
-        if (await async_validate_bip39(phrase) is True) and (phrase not in await get_user_phrases(user_id)):
+        if (bip39_validate(phrase) is True) and (phrase not in await get_user_phrases(user_id)):
             await add_user_phrase(user_id, phrase)
             valid_phrases.append(phrase)
     await message.reply("Успешно добавленные строки:\n" + "\n".join(valid_phrases),
